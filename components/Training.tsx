@@ -36,7 +36,7 @@ const Training: React.FC = () => {
         const fetchConfig = async () => {
             try {
                 console.log("Fetching configuration from backend...");
-                const response = await fetch('http://localhost:8000/train/config');
+                const response = await fetch(`${API_BASE_URL}/train/config`);
                 if (response.ok) {
                     const data = await response.json();
                     setParams(data);
@@ -53,7 +53,7 @@ const Training: React.FC = () => {
     const handleUpdateConfig = async () => {
         try {
             console.log("Updating configuration...", params);
-            const response = await fetch('http://localhost:8000/train/config', {
+            const response = await fetch(`${API_BASE_URL}/train/config`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(params)

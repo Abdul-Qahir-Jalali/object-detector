@@ -1,5 +1,6 @@
 
 import React, { useState } from 'react';
+import { API_BASE_URL } from '../config';
 
 interface SignupFormProps {
   onSignup: () => void;
@@ -50,7 +51,7 @@ const SignupForm: React.FC<SignupFormProps> = ({ onSignup, onNavigateToLogin }) 
 
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:8000/signup', {
+      const response = await fetch(`${API_BASE_URL}/signup`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password }),

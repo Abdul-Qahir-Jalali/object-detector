@@ -1,5 +1,6 @@
 
 import React, { useState } from 'react';
+import { API_BASE_URL } from '../config';
 
 interface LoginFormProps {
   onLogin: () => void;
@@ -50,7 +51,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin, onNavigateToSignup, init
     if (username && password) {
       setLoading(true);
       try {
-        const response = await fetch('http://localhost:8000/login', {
+        const response = await fetch(`${API_BASE_URL}/login`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ username, password }),
