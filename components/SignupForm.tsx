@@ -8,9 +8,9 @@ interface SignupFormProps {
 }
 
 const SignupForm: React.FC<SignupFormProps> = ({ onSignup, onNavigateToLogin }) => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [username, setUsername] = useState('demo12345');
+  const [password, setPassword] = useState('demo12345');
+  const [confirmPassword, setConfirmPassword] = useState('demo12345');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
@@ -50,25 +50,17 @@ const SignupForm: React.FC<SignupFormProps> = ({ onSignup, onNavigateToLogin }) 
     }
 
     setLoading(true);
-    try {
-      const response = await fetch(`${API_BASE_URL}/signup`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password }),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        onSignup();
-      } else {
-        setError(data.detail || "Signup failed");
-      }
-    } catch (err) {
-      setError("Cannot connect to server");
-    } finally {
-      setLoading(false);
-    }
+    
+    // Demo mode: Just inform user to use login page
+    await new Promise(resolve => setTimeout(resolve, 500));
+    
+    setLoading(false);
+    setSuccessMsg("Account ready! Please use the Login page with demo12345 / demo12345");
+    
+    // Auto-redirect to login after 2 seconds
+    setTimeout(() => {
+      onNavigateToLogin();
+    }, 2000);
   };
 
   return (

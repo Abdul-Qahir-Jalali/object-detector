@@ -19,19 +19,14 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin, onNavigateToSignup, init
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  // Load saved credentials
+  // Auto-fill demo credentials
   React.useEffect(() => {
-    const saved = localStorage.getItem('login_credentials');
-    if (saved) {
-      try {
-        const { u, p } = JSON.parse(saved);
-        setUsername(u);
-        setPassword(p);
-        setRememberMe(true);
-      } catch (e) {
-        localStorage.removeItem('login_credentials');
-      }
-    }
+    const demoUsername = 'demo12345';
+    const demoPassword = 'demo12345';
+    
+    setUsername(demoUsername);
+    setPassword(demoPassword);
+    setRememberMe(true);
   }, []);
 
   // Clear success message after 3 seconds if it exists
@@ -50,32 +45,20 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLogin, onNavigateToSignup, init
 
     if (username && password) {
       setLoading(true);
-      try {
-        const response = await fetch(`${API_BASE_URL}/login`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ username, password }),
-        });
-
-        const data = await response.json();
-
-        if (response.ok) {
-          if (rememberMe) {
-            localStorage.setItem('login_credentials', JSON.stringify({ u: username, p: password }));
-          } else {
-            localStorage.removeItem('login_credentials');
-          }
-          onLogin();
-        } else {
-          // Display specific error from backend (e.g., "Invalid username or password")
-          setError(data.detail || "Login failed");
-        }
-      } catch (err) {
-        // Only show connection error if it's truly a fetch failure
-        console.error("Login error:", err);
-        setError("Cannot connect to server. Please check your connection.");
-      } finally {
+      
+      // Demo mode: Accept the demo credentials without server
+      const demoUsername = 'demo12345';
+      const demoPassword = 'demo12345';
+      
+      // Simulate network delay for UX
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      if (username === demoUsername && password === demoPassword) {
         setLoading(false);
+        onLogin();
+      } else {
+        setLoading(false);
+        setError("Invalid credentials. Use demo12345 / demo12345");
       }
     } else {
       setError("Please enter both username and password");
