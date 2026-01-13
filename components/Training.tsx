@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { API_BASE_URL } from '../config';
 
 interface TrainingParams {
     model: string;
@@ -110,7 +111,7 @@ const Training: React.FC = () => {
     };
 
     return (
-        <div className="w-full max-w-5xl mx-auto px-4 py-32 animate-in fade-in slide-in-from-bottom-4 duration-1000 relative font-sans">
+        <div className="w-full max-w-5xl mx-auto px-4 py-8 md:py-32 animate-in fade-in slide-in-from-bottom-4 duration-1000 relative font-sans">
             {/* Confirmation Modal */}
             {showConfirm && (
                 <div className="fixed inset-0 z-[100] flex items-center justify-center bg-white/80 backdrop-blur-md px-4">

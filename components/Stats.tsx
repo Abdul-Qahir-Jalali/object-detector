@@ -12,7 +12,7 @@ const Stats: React.FC = () => {
     const weeklyActivity = [40, 65, 30, 85, 45, 70, 90]; // Mock height percentages
 
     return (
-        <div className="w-full max-w-5xl mx-auto px-4 py-12 animate-in fade-in slide-in-from-bottom-4 duration-1000 font-sans">
+        <div className="w-full max-w-5xl mx-auto px-4 py-8 md:py-12 animate-in fade-in slide-in-from-bottom-4 duration-1000 font-sans">
             <div className="mb-12 text-center">
                 <h1 className="text-5xl font-black italic tracking-tighter mb-2 text-gray-900">
                     ANALYTICS <span className="text-[#116dff]">DASHBOARD</span>

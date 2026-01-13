@@ -89,7 +89,7 @@ const Dashboard: React.FC = () => {
   const displayedHistory = showAllHistory ? history : history.slice(0, 3);
 
   return (
-    <div className="w-full max-w-5xl mx-auto px-4 py-12 animate-in fade-in slide-in-from-bottom-4 duration-1000 font-sans">
+    <div className="w-full max-w-5xl mx-auto px-4 py-8 md:py-12 animate-in fade-in slide-in-from-bottom-4 duration-1000 font-sans">
       {/* Header Section */}
       <div className="mb-12 text-center">
         <h1 className="text-5xl font-black italic tracking-tighter mb-2 text-gray-900">

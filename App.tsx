@@ -13,6 +13,7 @@ const App: React.FC = () => {
     return (saved as PageState) || 'login';
   });
   const [loginMessage, setLoginMessage] = useState<string>('');
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   useEffect(() => {
     localStorage.setItem('app_page', currentPage);
@@ -38,20 +39,67 @@ const App: React.FC = () => {
     setLoginMessage('');
   };
 
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+
+  const closeSidebar = () => {
+    setIsSidebarOpen(false);
+  };
+
   const isLoggedIn = currentPage === 'dashboard' || currentPage === 'training' || currentPage === 'stats';
 
   return (
-    <div className="min-h-screen bg-[#F0F4F8] text-[#111827] relative overflow-hidden bg-pattern flex font-sans">
-
-      {/* Side Master (Sidebar Navigation) - Only shown when logged in */}
+    <div className="min-h-screen bg-[#F0F4F8] text-[#111827] relative overflow-hidden bg-pattern flex flex-col md:flex-row font-sans">
+      
+      {/* Mobile Header - Only shown on mobile when logged in */}
       {isLoggedIn && (
-        <div className="w-64 h-screen fixed left-0 top-0 z-50 bg-white/80 backdrop-blur-md border-r border-gray-200 flex flex-col p-6 animate-in slide-in-from-left duration-700 shadow-xl">
-          <div className="mb-12">
+        <div className="md:hidden fixed top-0 left-0 w-full bg-white/80 backdrop-blur-md border-b border-gray-200 z-40 px-4 py-3 flex items-center justify-between shadow-sm">
+           <div className="flex items-center gap-2">
+              <h2 className="text-sm font-black italic tracking-tighter text-gray-900">
+                OBJECT <span className="text-[#116dff]">DETECTOR</span>
+              </h2>
+           </div>
+           <button 
+             onClick={toggleSidebar}
+             className="p-2 text-gray-600 hover:text-[#116dff] transition-colors bg-gray-50 rounded-lg"
+           >
+             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+               {isSidebarOpen ? <path d="M18 6L6 18M6 6l12 12" /> : <path d="M3 12h18M3 6h18M3 18h18" />}
+             </svg>
+           </button>
+        </div>
+      )}
+
+      {/* Overlay for mobile sidebar */}
+      {isLoggedIn && isSidebarOpen && (
+        <div 
+          onClick={closeSidebar}
+          className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40 md:hidden animate-in fade-in duration-200"
+        />
+      )}
+
+      {/* Side Master (Sidebar Navigation) */}
+      {isLoggedIn && (
+        <div className={`
+          w-64 h-screen fixed left-0 top-0 z-50 bg-white/90 backdrop-blur-xl border-r border-gray-200 flex flex-col p-6 shadow-2xl md:shadow-xl
+          transition-transform duration-300 ease-spring
+          ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
+        `}>
+          <div className="mb-12 hidden md:block">
             <h2 className="text-xl font-black italic tracking-tighter text-gray-900">
               OBJECT <span className="text-[#116dff]">DETECTOR</span>
             </h2>
             <p className="text-gray-500 text-[8px] uppercase tracking-[0.4em] font-bold mt-1">Advanced AI Vision Console</p>
           </div>
+
+          {/* Mobile-only header inside sidebar to close it */}
+           <div className="mb-8 md:hidden flex justify-between items-center">
+             <span className="text-xs font-black uppercase tracking-widest text-[#116dff]">Menu</span>
+             <button onClick={closeSidebar} className="p-1 text-gray-400 hover:text-red-500">
+               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+             </button>
+           </div>
 
           <nav className="flex-grow space-y-4">
             {[
@@ -61,7 +109,10 @@ const App: React.FC = () => {
             ].map((item) => (
               <button
                 key={item.id}
-                onClick={() => setCurrentPage(item.id as PageState)}
+                onClick={() => {
+                  setCurrentPage(item.id as PageState);
+                  closeSidebar();
+                }}
                 className={`w-full flex items-center gap-4 px-6 py-4 rounded-xl text-[10px] font-bold uppercase tracking-[0.1em] transition-all duration-300 ${currentPage === item.id
                   ? 'bg-[#116dff] text-white shadow-[0_4px_14px_rgba(17,109,255,0.4)]'
                   : 'text-gray-400 hover:text-[#116dff] hover:bg-blue-50'
@@ -77,7 +128,10 @@ const App: React.FC = () => {
 
           <div className="pt-8 border-t border-gray-100">
             <button
-              onClick={() => setCurrentPage('login')}
+              onClick={() => {
+                setCurrentPage('login');
+                closeSidebar();
+              }}
               className="w-full flex items-center gap-4 px-6 py-4 text-red-500 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all text-[10px] uppercase tracking-[0.2em] font-bold"
             >
               <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -90,7 +144,7 @@ const App: React.FC = () => {
       )}
 
       {/* Main Content Area */}
-      <div className={`flex-grow transition-all duration-700 ${isLoggedIn ? 'pl-64' : ''}`}>
+      <div className={`flex-grow transition-all duration-300 w-full ${isLoggedIn ? 'md:pl-64 pt-16 md:pt-0' : ''}`}>
         {/* Dynamic Render based on state */}
         {currentPage === 'login' && (
           <LoginForm
